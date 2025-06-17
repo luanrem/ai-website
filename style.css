@@ -26,9 +26,9 @@ body {
 }
 
 .max-w-4xl {
-    max-width: 100%;
-    padding-left: 15px;
-    padding-right: 15px;
+    max-width: 64rem;
+    margin-left: 1rem;
+    margin-right: 1rem;
 }
 
 /* Utility classes */
