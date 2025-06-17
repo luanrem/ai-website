@@ -1,41 +1,52 @@
-// Generate more intense noise effect
-function createNoise() {
-    const canvas = document.createElement('canvas');
-    canvas.width = 200;
-    canvas.height = 200;
-    const ctx = canvas.getContext('2d');
-    
-    const noiseDiv = document.getElementById('noise');
-    
-    function drawNoise() {
-        const imgData = ctx.createImageData(200, 200);
-        const data = imgData.data;
-        
-        for (let i = 0; i < data.length; i += 4) {
-            // Noise in black and white more intense
-            const value = Math.random() * 255;
-            // Increase noise intensity
-            const intensity = Math.random() * 1.5;
-            
-            data[i] = value;     // red
-            data[i+1] = value;   // green
-            data[i+2] = value;   // blue
-            data[i+3] = 255 * (intensity > 1 ? 1 : intensity);
-        }
-        
-        ctx.putImageData(imgData, 0, 0);
-        noiseDiv.style.backgroundImage = `url(${canvas.toDataURL('image/png')})`;
-        
-        requestAnimationFrame(drawNoise);
-    }
-    
-    drawNoise();
+// ==========================================================================
+// MAIN APPLICATION INITIALIZATION
+// ==========================================================================
+
+document.addEventListener('DOMContentLoaded', function() {
+    initializeApplication();
+});
+
+function initializeApplication() {
+    // Initialize all effects and functionality
+    initializeNoiseEffect();
+    initializeCopyButton();
+    initializeSurveillanceVideo();
+    initializeRandomGlitches();
+    initializeHorizontalScrollCheck();
 }
 
-// Function to copy the encrypted message
+// ==========================================================================
+// NOISE EFFECT - IMPROVED PERFORMANCE
+// ==========================================================================
+
+function initializeNoiseEffect() {
+    // The noise effect is now handled by CSS for better performance
+    // This function is kept for potential future enhancements
+    console.log('Noise effect initialized via CSS');
+}
+
+// ==========================================================================
+// COPY BUTTON FUNCTIONALITY
+// ==========================================================================
+
+function initializeCopyButton() {
+    const copyButton = document.getElementById('copyButton');
+    if (copyButton) {
+        copyButton.addEventListener('click', copyEncryptedMessage);
+    }
+}
+
 function copyEncryptedMessage() {
-    const encryptedText = document.getElementById('content-text').innerText;
+    const encryptedCodeElement = document.getElementById('encrypted-code');
     const feedback = document.getElementById('copyFeedback');
+    const button = document.getElementById('copyButton');
+    
+    if (!encryptedCodeElement) {
+        console.error('Encrypted code element not found');
+        return;
+    }
+    
+    const encryptedText = encryptedCodeElement.textContent;
     
     // Method 1: Using modern Clipboard API
     if (navigator.clipboard && window.isSecureContext) {
@@ -53,7 +64,6 @@ function copyEncryptedMessage() {
     }
 }
 
-// Alternative copy method for older browsers
 function fallbackCopyMethod(text) {
     // Create a temporary text element
     const textArea = document.createElement("textarea");
@@ -73,6 +83,8 @@ function fallbackCopyMethod(text) {
         const successful = document.execCommand('copy');
         if (successful) {
             showCopyFeedback();
+        } else {
+            console.error('Fallback copy failed');
         }
     } catch (err) {
         console.error('Fallback: Could not copy text', err);
@@ -82,10 +94,11 @@ function fallbackCopyMethod(text) {
     document.body.removeChild(textArea);
 }
 
-// Show copy feedback with glitch effect
 function showCopyFeedback() {
     const feedback = document.getElementById('copyFeedback');
     const button = document.getElementById('copyButton');
+    
+    if (!feedback || !button) return;
     
     // Add class for glitch effect
     feedback.classList.add('active');
@@ -100,12 +113,340 @@ function showCopyFeedback() {
         feedback.classList.remove('active');
         button.classList.remove('glitch');
         button.disabled = false;
-        button.innerHTML = '<span class="mr-1">COPY CODE</span><svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>';
+        button.innerHTML = `
+            <span class="mr-1">COPY CODE</span>
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+            </svg>
+        `;
     }, 2000);
 }
 
-// Add random glitches on screen with higher frequency and intensity
-function randomGlitches() {
+// ==========================================================================
+// YOUTUBE IFRAME PLAYER API
+// ==========================================================================
+
+// Global variable to store the YouTube player instance
+let youtubePlayer = null;
+
+// Load YouTube IFrame Player API dynamically
+function loadYouTubeAPI() {
+    // Check if API is already loaded
+    if (window.YT && window.YT.Player) {
+        return Promise.resolve();
+    }
+    
+    return new Promise((resolve, reject) => {
+        // Create script element for YouTube API
+        const script = document.createElement('script');
+        script.src = 'https://www.youtube.com/iframe_api';
+        script.async = true;
+        
+        // Set up global callback for when API is ready
+        window.onYouTubeIframeAPIReady = function() {
+            console.log('YouTube IFrame API loaded successfully');
+            resolve();
+        };
+        
+        // Handle script load errors
+        script.onerror = () => {
+            console.error('Failed to load YouTube IFrame API');
+            reject(new Error('YouTube API load failed'));
+        };
+        
+        // Append script to document head
+        document.head.appendChild(script);
+    });
+}
+
+// ==========================================================================
+// SURVEILLANCE VIDEO SIMULATION
+// ==========================================================================
+
+function initializeSurveillanceVideo() {
+    updateDateTime();
+    startCountdown();
+    createVideoGlitch();
+}
+
+function updateDateTime() {
+    const dateTimeElement = document.getElementById('date-time');
+    if (!dateTimeElement) return;
+    
+    const now = new Date();
+    // Use future date to match narrative
+    const futureYear = 2025;
+    now.setFullYear(futureYear);
+    
+    const dateStr = now.toLocaleDateString('pt-BR', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric'
+    }).replace(/\//g, '-');
+    
+    const timeStr = now.toLocaleTimeString('pt-BR', {
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: false
+    });
+    
+    dateTimeElement.textContent = `${dateStr} ${timeStr}`;
+    
+    // Update every second
+    setTimeout(updateDateTime, 1000);
+}
+
+function startCountdown() {
+    let counter = 10; // Reduced to 10 seconds for testing
+    const counterElement = document.getElementById('reconnect-counter');
+    const signalLostOverlay = document.getElementById('signal-lost-overlay');
+    
+    if (!counterElement || !signalLostOverlay) return;
+    
+    function updateCounter() {
+        if (counter > 0) {
+            counterElement.textContent = counter;
+            counter--;
+            setTimeout(updateCounter, 1000);
+        } else {
+            // Hide signal lost overlay and show YouTube video
+            signalLostOverlay.style.opacity = '0';
+            setTimeout(() => {
+                signalLostOverlay.style.display = 'none';
+                showYouTubeVideo();
+            }, 500);
+        }
+    }
+    
+    updateCounter();
+}
+
+/**
+ * Shows YouTube video with autoplay and sound control
+ * 
+ * Browser autoplay policies require videos to be muted initially to autoplay.
+ * This function creates a YouTube player that:
+ * 1. Starts muted and autoplays (compliant with browser policies)
+ * 2. Allows user interaction (click or scroll) to unmute and enable sound
+ * 3. Provides visual feedback for sound activation
+ */
+async function showYouTubeVideo() {
+    const youtubeContainer = document.getElementById('youtube-container');
+    const videoTransition = document.getElementById('video-transition');
+    
+    if (!youtubeContainer || !videoTransition) return;
+    
+    try {
+        // Show transition effect
+        videoTransition.style.animation = 'videoTransition 1s ease';
+        
+        // Load YouTube API if not already loaded
+        await loadYouTubeAPI();
+        
+        setTimeout(() => {
+            // Create container for YouTube player
+            const playerContainer = document.createElement('div');
+            playerContainer.id = 'youtube-player';
+            playerContainer.style.width = '100%';
+            playerContainer.style.height = '100%';
+            
+            // Add subtle sound activation indicator
+            const soundIndicator = document.createElement('div');
+            soundIndicator.id = 'sound-indicator';
+            soundIndicator.innerHTML = `
+                <div class="sound-hint">
+                    <div class="sound-icon">🔇</div>
+                    <div class="sound-text">INTERACT TO ACTIVATE SOUND</div>
+                </div>
+            `;
+            soundIndicator.style.cssText = `
+                position: absolute;
+                top: 10px;
+                right: 10px;
+                background: rgba(0, 0, 0, 0.8);
+                padding: 8px 12px;
+                border-radius: 4px;
+                z-index: 10;
+                cursor: pointer;
+                transition: opacity 0.3s ease;
+                border: 1px solid rgba(255, 255, 255, 0.2);
+            `;
+            
+            // Add styles for sound indicator
+            const soundStyles = document.createElement('style');
+            soundStyles.textContent = `
+                .sound-hint {
+                    text-align: center;
+                    color: white;
+                    font-family: 'Courier New', monospace;
+                }
+                .sound-icon {
+                    font-size: 1.2rem;
+                    margin-bottom: 5px;
+                    animation: pulse 2s infinite;
+                }
+                .sound-text {
+                    font-size: 0.7rem;
+                    letter-spacing: 0.5px;
+                    text-shadow: 0 0 3px rgba(255, 255, 255, 0.5);
+                }
+                @keyframes pulse {
+                    0%, 100% { opacity: 1; }
+                    50% { opacity: 0.5; }
+                }
+            `;
+            document.head.appendChild(soundStyles);
+            
+            // Clear container and add elements
+            youtubeContainer.innerHTML = '';
+            youtubeContainer.appendChild(playerContainer);
+            youtubeContainer.appendChild(soundIndicator);
+            youtubeContainer.style.opacity = '1';
+            
+            // Create YouTube player with autoplay and mute
+            youtubePlayer = new YT.Player('youtube-player', {
+                height: '100%',
+                width: '100%',
+                videoId: 'tqn1cLICJm4',
+                playerVars: {
+                    // Autoplay settings - muted for browser compliance
+                    autoplay: 1,
+                    mute: 1,
+                    // Player appearance
+                    modestbranding: 1,
+                    rel: 0,
+                    showinfo: 0,
+                    controls: 1,
+                    disablekb: 1,
+                    fs: 0,
+                    iv_load_policy: 3,
+                    cc_load_policy: 0,
+                    // Origin for security
+                    origin: window.location.origin
+                },
+                events: {
+                    onReady: function(event) {
+                        console.log('YouTube player ready');
+                        // Player is ready and will autoplay muted
+                    },
+                    onStateChange: function(event) {
+                        // Handle player state changes
+                        if (event.data === YT.PlayerState.PLAYING) {
+                            console.log('Video started playing');
+                        }
+                    },
+                    onError: function(event) {
+                        console.error('YouTube player error:', event.data);
+                    }
+                }
+            });
+            
+            // Function to activate sound
+            function activateSound() {
+                if (youtubePlayer && youtubePlayer.unMute) {
+                    // Unmute the player
+                    youtubePlayer.unMute();
+                    
+                    // Update indicator to show sound is active
+                    soundIndicator.innerHTML = `
+                        <div class="sound-hint">
+                            <div class="sound-icon">🔊</div>
+                            <div class="sound-text">SOUND ACTIVATED</div>
+                        </div>
+                    `;
+                    
+                    // Fade out indicator after 2 seconds
+                    setTimeout(() => {
+                        soundIndicator.style.opacity = '0';
+                        setTimeout(() => {
+                            soundIndicator.remove();
+                        }, 300);
+                    }, 2000);
+                    
+                    // Remove event listeners to prevent multiple activations
+                    document.removeEventListener('click', activateSound);
+                    document.removeEventListener('scroll', activateSound);
+                    soundIndicator.removeEventListener('click', activateSound);
+                    
+                    console.log('Sound activated by user interaction');
+                }
+            }
+            
+            // Add multiple event listeners for sound activation
+            // 1. Click anywhere on the page
+            document.addEventListener('click', activateSound, { once: true });
+            
+            // 2. Scroll anywhere on the page
+            document.addEventListener('scroll', activateSound, { once: true });
+            
+            // 3. Click directly on the sound indicator
+            soundIndicator.addEventListener('click', activateSound);
+            
+            // Hide transition after video loads
+            setTimeout(() => {
+                videoTransition.style.animation = '';
+            }, 1000);
+            
+        }, 500);
+        
+    } catch (error) {
+        console.error('Error creating YouTube player:', error);
+        // Fallback to simple iframe if API fails
+        createFallbackIframe(youtubeContainer, videoTransition);
+    }
+}
+
+/**
+ * Fallback function that creates a simple iframe if YouTube API fails
+ */
+function createFallbackIframe(youtubeContainer, videoTransition) {
+    const iframe = document.createElement('iframe');
+    iframe.src = "https://www.youtube.com/embed/tqn1cLICJm4?autoplay=1&mute=1&origin=" + window.location.origin;
+    iframe.title = 'Surveillance Feed';
+    iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+    iframe.allowFullscreen = false;
+    iframe.style.width = '100%';
+    iframe.style.height = '100%';
+    iframe.style.border = 'none';
+    
+    youtubeContainer.innerHTML = '';
+    youtubeContainer.appendChild(iframe);
+    youtubeContainer.style.opacity = '1';
+    
+    setTimeout(() => {
+        videoTransition.style.animation = '';
+    }, 1000);
+}
+
+function createVideoGlitch() {
+    const glitchElement = document.getElementById('surveillance-glitch');
+    if (!glitchElement) return;
+    
+    // Add random glitch effects to the video
+    setInterval(() => {
+        if (Math.random() < 0.1) { // 10% chance every interval
+            glitchElement.style.opacity = '0.2';
+            glitchElement.style.transform = `translateX(${Math.random() * 10 - 5}px)`;
+            
+            setTimeout(() => {
+                glitchElement.style.opacity = '0';
+                glitchElement.style.transform = 'translateX(0)';
+            }, 100);
+        }
+    }, 2000);
+}
+
+// ==========================================================================
+// RANDOM GLITCH EFFECTS
+// ==========================================================================
+
+function initializeRandomGlitches() {
+    addBodyGlitches();
+    addBadReceptionEffect();
+}
+
+function addBodyGlitches() {
     const body = document.body;
     
     setInterval(() => {
@@ -137,14 +478,14 @@ function randomGlitches() {
                     }, 50);
                     break;
                 case 3:
-                    // New: Vertical displacement
+                    // Vertical displacement
                     body.style.transform = `translateY(${Math.random() * 10 - 5}px)`;
                     setTimeout(() => {
                         body.style.transform = 'translateY(0)';
                     }, 80);
                     break;
                 case 4:
-                    // New: Color distortion
+                    // Color distortion
                     body.style.filter = `hue-rotate(${Math.random() * 90}deg) grayscale(0.8)`;
                     setTimeout(() => {
                         body.style.filter = 'none';
@@ -153,186 +494,41 @@ function randomGlitches() {
             }
         }
     }, 1500);
-    
+}
+
+function addBadReceptionEffect() {
     // Add occasional "bad reception" effect
     setInterval(() => {
         if (Math.random() < 0.05) {
             const container = document.querySelector('.container');
-            container.style.transform = 'skewX(2deg)';
-            container.style.filter = 'blur(1px)';
-            
-            setTimeout(() => {
-                container.style.transform = 'skewX(0)';
-                container.style.filter = 'none';
-            }, 200);
+            if (container) {
+                container.style.transform = 'skewX(2deg)';
+                container.style.filter = 'blur(1px)';
+                
+                setTimeout(() => {
+                    container.style.transform = 'skewX(0)';
+                    container.style.filter = 'none';
+                }, 200);
+            }
         }
     }, 5000);
 }
 
-// Surveillance video simulation with YouTube transition
-function simulateSurveillanceVideo() {
-    // Update date and time
-    function updateDateTime() {
-        const now = new Date();
-        // Use future date to match narrative
-        const futureYear = 2025;
-        now.setFullYear(futureYear);
-        
-        const dateStr = now.toLocaleDateString('pt-BR', {
-            day: '2-digit',
-            month: '2-digit',
-            year: 'numeric'
-        }).replace(/\//g, '-');
-        
-        const timeStr = now.toLocaleTimeString('pt-BR', {
-            hour: '2-digit',
-            minute: '2-digit',
-            second: '2-digit',
-            hour12: false
-        });
-        
-        document.getElementById('date-time').textContent = `${dateStr} ${timeStr}`;
-    }
-    
-    // Countdown
-    let counter = 10; // Reduced to 10 seconds for testing
-    const counterElement = document.getElementById('reconnect-counter');
-    const signalLostOverlay = document.getElementById('signal-lost-overlay');
-    const youtubeContainer = document.getElementById('youtube-container');
-    const videoTransition = document.getElementById('video-transition');
-    
-    function updateCounter() {
-        counterElement.textContent = counter;
-        
-        if (counter <= 0) {
-            // When counter reaches zero, show YouTube video
-            showYouTubeVideo();
-            // Stop counter
-            clearInterval(counterInterval);
-        } else {
-            counter--;
-        }
-    }
-    
-    // Function to show YouTube video with transition effect
-    function showYouTubeVideo() {
-        // Create YouTube iframe
-        const iframe = document.createElement('iframe');
-        
-        // Use correct link with embedding parameters
-        iframe.src = "https://www.youtube.com/embed/tqn1cLICJm4?autoplay=1&mute=0&enablejsapi=1&origin=" + window.location.origin;
-        iframe.title = "IN01 Surveillance Footage";
-        iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture";
-        iframe.allowFullscreen = true;
-        
-        // Add iframe to container
-        youtubeContainer.innerHTML = '';
-        youtubeContainer.appendChild(iframe);
-        
-        // Transition effect
-        videoTransition.style.animation = 'videoTransition 2s forwards';
-        
-        // After a small delay, hide overlay and show video
-        setTimeout(() => {
-            signalLostOverlay.style.opacity = '0';
-            
-            setTimeout(() => {
-                youtubeContainer.style.opacity = '1';
-                signalLostOverlay.style.display = 'none';
-            }, 500);
-        }, 1000);
-        
-        // Additional check to ensure video is displayed
-        setTimeout(() => {
-            if (youtubeContainer.style.opacity !== '1') {
-                youtubeContainer.style.opacity = '1';
-                signalLostOverlay.style.display = 'none';
-            }
-        }, 3000);
-    }
-    
-    // Video glitch effects
-    const glitchElement = document.getElementById('surveillance-glitch');
-    function createVideoGlitch() {
-        if (Math.random() < 0.1) {
-            const glitchType = Math.floor(Math.random() * 3);
-            
-            switch(glitchType) {
-                case 0:
-                    // Horizontal lines
-                    glitchElement.style.background = `repeating-linear-gradient(
-                        0deg,
-                        transparent,
-                        transparent 5px,
-                        rgba(255, 255, 255, 0.1) 5px,
-                        rgba(255, 255, 255, 0.1) 10px
-                    )`;
-                    break;
-                case 1:
-                    // Color displacement
-                    glitchElement.style.boxShadow = `
-                        inset 5px 0 0 0 rgba(255,0,0,0.2),
-                        inset -5px 0 0 0 rgba(0,255,255,0.2)
-                    `;
-                    break;
-                case 2:
-                    // Image distortion
-                    glitchElement.style.background = `linear-gradient(
-                        ${Math.random() * 360}deg,
-                        transparent 0%,
-                        rgba(255, 255, 255, 0.05) 50%,
-                        transparent 100%
-                    )`;
-                    break;
-            }
-            
-            setTimeout(() => {
-                glitchElement.style.background = 'transparent';
-                glitchElement.style.boxShadow = 'none';
-            }, 200);
-        }
-    }
-    
-    // Start simulation
-    const dateTimeInterval = setInterval(updateDateTime, 1000);
-    const counterInterval = setInterval(updateCounter, 1000);
-    const glitchInterval = setInterval(createVideoGlitch, 500);
-    
-    // Ensure video is shown even if something goes wrong
-    setTimeout(() => {
-        if (parseInt(counterElement.textContent) <= 0 && youtubeContainer.style.opacity !== '1') {
-            showYouTubeVideo();
-        }
-    }, 12000); // Safety check after 12 seconds
-}
+// ==========================================================================
+// HORIZONTAL SCROLL PREVENTION
+// ==========================================================================
 
-// Initialize effects when page loads
-window.addEventListener('load', () => {
-    createNoise();
-    randomGlitches();
-    simulateSurveillanceVideo();
-    
-    // Add click event to copy button
-    document.getElementById('copyButton').addEventListener('click', copyEncryptedMessage);
-    
-    // Check for horizontal scroll and fix if necessary
+function initializeHorizontalScrollCheck() {
+    // Prevent horizontal scrolling
     function checkHorizontalScroll() {
-        if (document.body.scrollWidth > window.innerWidth) {
-            console.log("Horizontal scroll detected, adjusting elements...");
-            
-            // Adjust elements that might be causing horizontal scroll
-            const codeFragment = document.getElementById('content-text');
-            if (codeFragment) {
-                codeFragment.style.maxWidth = '100%';
-                codeFragment.style.overflowX = 'auto';
-                codeFragment.style.wordBreak = 'break-word';
-            }
+        if (window.scrollX !== 0) {
+            window.scrollTo(0, window.scrollY);
         }
     }
     
-    // Check after complete loading
-    setTimeout(checkHorizontalScroll, 1000);
+    // Check on scroll events
+    window.addEventListener('scroll', checkHorizontalScroll);
     
-    // Check after window resize
-    window.addEventListener('resize', checkHorizontalScroll);
-}); 
+    // Also check periodically
+    setInterval(checkHorizontalScroll, 1000);
+} 
