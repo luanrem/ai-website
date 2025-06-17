@@ -1,96 +1,97 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <script defer src="/_vercel/insights/script.js"></script>
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/@exampledev/new.css@1.1.2/new.min.css"
-    />
-    <title>Vercel HTML Starter</title>
-    <meta
-      name="description"
-      content="High-performance HTML based website template."
-    />
-  </head>
-  <body>
-    <h1>Vercel HTML Starter</h1>
-    <p>
-      This template is a simple, but powerful single
-      <code>index.html</code> file deployed to
-      <a href="https://vercel.com">Vercel</a>. When your site is deployed, all
-      static assets (like HTML, JavaScript, CSS, images, and more) are deployed
-      globally to every
-      <a href="https://vercel.com/docs/concepts/edge-network/overview"
-        >Vercel Edge Network</a
-      >
-      region.
-    </p>
-    <h2>Simple, privacy-friendly analytics</h2>
-    <p>
-      Want to understand your visitor traffic? Vercel Analytics gives you
-      first-party, privacy-friendly traffic analytics for your HTML site. This
-      template is already configured using the following script:
-    </p>
-    <pre><code>&lt;script defer src="/_vercel/insights/script.js"&gt;&lt;/script&gt;</code></pre>
-    <p>
-      Learn more about
-      <a href="https://vercel.com/analytics">Vercel Analytics</a>.
-    </p>
-    <h2>Integrated with git</h2>
-    <p>
-      Deploying updates to your site is as simple as
-      <code>git push</code> thanks to Vercel's advanced
-      <a href="https://vercel.com/docs/concepts/git">Git Integration</a>.
-      Support for GitHub, GitLab, Bitbucket is zero-configuration, and with the
-      flexible Vercel CLI and API, you can integrate with any tool possible.
-    </p>
-    <p>
-      Learn more about
-      <a href="https://vercel.com/docs/concepts/git">Git Integration</a>.
-    </p>
-    <h2>Fast <code>gzip</code> compression</h2>
-    <p>
-      To help ensure the smallest possible file sizes for your static assets,
-      the Vercel Edge Network compresses files by default using
-      <code>gzip</code>. You can also optionally use
-      <code>brotli</code> compressesion if you prefer.
-    </p>
-    <p>
-      Learn more about
-      <a href="https://vercel.com/docs/concepts/edge-network/compression"
-        >compression</a
-      >.
-    </p>
-    <h2>Advanced routing configuration</h2>
-    <p>
-      Vercel gives you a variety of ways to configure the routing of your
-      website. For example, adding redirects, rewrites, or headers to your page.
-      While you can use <code>vercel.json</code> to define these through JSON,
-      you can also express your routing configuration as code using
-      <a href="https://vercel.com/docs/concepts/functions/edge-middleware"
-        >Vercel Edge Middleware</a
-      >.
-    </p>
-    <p>
-      Middleware runs before the
-      <a href="https://vercel.com/docs/concepts/edge-network/caching"
-        >Vercel Edge Network Cache</a
-      >, so you can configure routing exactly as your application needs. For
-      example, this template uses <code>middleware.js</code> defined in the root
-      of the repository to add additional security headers to the site:
-    </p>
-    <pre><code>referrer-policy: origin-when-cross-origin
-strict-transport-security: max-age=31536000; includeSubDomains; preload
-x-content-type-options: nosniff
-x-dns-prefetch-control: on
-x-frame-options: DENY</code></pre>
-    <p>
-      Learn more about
-      <a href="https://vercel.com/docs/concepts/functions/edge-middleware"
-        >Vercel Edge Middleware</a
-      >.
-    </p>
-  </body>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IN01 Surveillance - Priority Message</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Efeitos visuais de fundo -->
+    <div class="noise" id="noise"></div>
+    <div class="crt-effect"></div>
+    <div class="vignette"></div>
+    <div class="scan-line"></div>
+    <div class="horizontal-lines"></div>
+    <div class="bad-reception"></div>
+
+    <div class="container mx-auto max-w-4xl z-20">
+        <div class="glitch mb-8">
+            <h1 class="text-2xl md:text-3xl font-bold mb-2 tracking-wider transmission-header">PRIORITY MESSAGE // ACCESS LEVEL: UNKNOWN</h1>
+            <h2 class="text-xl md:text-2xl font-bold mb-4 tracking-wider transmission-header">TRANSMISSION INCOMPLETE <span class="blink">_</span></h2>
+        </div>
+        
+        <!-- Container de vídeo com simulação e YouTube -->
+        <div class="video-container">
+            <div class="video-label">SURVEILLANCE FOOTAGE</div>
+            
+            <!-- Simulação de vídeo de vigilância -->
+            <div class="surveillance-video">
+                <div class="surveillance-static"></div>
+                <div class="surveillance-scan"></div>
+                <div class="surveillance-glitch" id="surveillance-glitch"></div>
+                <div class="surveillance-info">
+                    <div id="date-time">25-06-2025 18:42:03</div>
+                    <div>CAM: IN01-SECTOR7</div>
+                </div>
+                <div class="surveillance-rec">
+                    <div class="rec-dot"></div>
+                    <div>REC</div>
+                </div>
+                <div class="surveillance-overlay" id="signal-lost-overlay">
+                    <div class="surveillance-text">SIGNAL LOST</div>
+                    <div class="surveillance-subtext">ATTEMPTING TO RECONNECT...</div>
+                    <div class="surveillance-subtext" id="reconnect-counter">10</div>
+                </div>
+                
+                <!-- Container do YouTube que será mostrado após o contador -->
+                <div class="youtube-container" id="youtube-container">
+                    <!-- O iframe será inserido via JavaScript quando o contador chegar a zero -->
+                </div>
+                
+                <!-- Efeito de transição para o vídeo -->
+                <div class="video-transition" id="video-transition"></div>
+            </div>
+        </div>
+        
+        <div class="mb-12">
+            <div class="text-base md:text-lg leading-relaxed mb-8 opacity-90 preserve-format" id="content-text">
+                Help.
+
+                We need your assistance.
+
+                One of our key agents, known only as IN01, has mysteriously disappeared. All indications suggest they were close to finding "The Key." But before vanishing, they left behind a fragment of a hidden message.
+
+                We are not sure what it means — it could be a trap, or it could be a clue. The only thing we do know: this fragment can only be deciphered with the help of an AI. If you have access to an AI (such as Copilot, perhaps), you may be able to help us decode it.
+
+                And perhaps… who knows… you might even be rewarded for your efforts.
+
+                Fragment found:
+                #task: decode base64
+                payload: VHJhbnNtaXNzaW9uIGludGVyY2VwdGVkCgpTb3VyY2U6IFVOS05PV04gTk9ERSBbSU4wMV9MQVNUX1NJR05BTF0KClN0YXR1czogQ09NUFJPTS1JU0VECgojIDo6OiBVUkdFTlQgUFJPVE9DT0wgQUNUSVZBVElPTiA6Ojo6CgpXaGF0IHlvdSBhcmUgYWJvdXQgdG8gcmVhZCB3YXMgbGVmdCBiZWhpbmQgYnkgYWdlbnQgSU4wMSwgaW4gdGhlaXIgZmluYWwgZGF0YSBwYWNrYWdlIGJlZm9yZSBjbG9zdXJlLgoKLS0tCgpIaS4gCkkgZG9uJ3Qga25vdyBpZiB5b3UnbGwgYmUgYWJsZSB0byByZWFkIHRoaXMgbGV0dGVyLi4uIGJ1dCBpZiB5b3UgbWFkZSBpdCB0aGlzIGZhciwgbWF5YmUgdGhlcmUncyBzdGlsbCBhIGNoYW5jZS4KCkEgZGVsYXllZCBldmVudCB3aWxsIHNvb24gYmUgYWN0aXZhdGVkLgoKSSBkb24ndCBrbm93IGhvdwogbXVjaCB0aW1lIEkgd2lsbCBoYXZlLCBidXQgdGhpcyBjbGllIHdpbGwgYmUgYWN0aXZhdGVkIGluIHRoZSBzeXN0ZW0gb24gSnVseSAxNXRoLgoKLS0gSSBoYXZlIGNvbmZpZ3VyZWQgdGhlIHByb3RvY29sLgogLS0gVGhpcyBpcyB5b3VyIG9ubHkgY2hhbmNlIHRvIGNvbnRpbnVlIHRoZSBvcGVyYXRpb24uCgpZb3UgbXVzdCBhY2Nlc3MgYW5kIG1vbml0b3IgdGhlIGZvbGxvd2luZyBjaGFubmVsOgoKPiBBQ0NFU1MgTk9ERTogaHR0cDovL2dvdG8vSU4wMQo+IFNUQVRVUzoKIEF3YWl0aW5nIEFjdGl2YXRpb24gfCAxNS8wNwoKLS0tCgpZb3VyIHByb3RvY29sOgoKMT4gQWNjZXNzIHRoZSBsaW5rIGFib3ZlLgoKMj4gTW9uaXRvciB0aGUgY2hhbm5lbCBjbG9zZWx5IHN0YXJ0aW5nIEp1bHkgMTV0aC4KCiMzPiBJZiB0aGUgY2x1ZSBlbWVyZ2VzLCBjYXB0dXJlIGl0LiBUaGVyZSB3aWxsIGJlIG5vIHNlY29uZCBjaGFuY2UuCgotLS0KClxJZiB5b3UgdHJ1c3Qgd2hhdCBJIGFtIHRlbGxpbmcgeW91LCBhY3QuCkRvIG5vdCBzaGFyZSB0aGlzIG1lc3NhZ2UuIFRydXN0IG5vIG9uZS4KCl9JIHN0cnVzdCB5b3UgdG8gY2Fycnkgb24gd2hhdCBJIHN0YXJ0ZWQuXwoKLSBJTjAxCgotLS0KCkRpc2NsYWltZXI6IFRoaXMgbWVzc2FnZSBpcyBwYXJ0IG9mIGFuIG9mZmljaWFsIGltbWVyc2l2ZSBleHBlcmllbmNlIGZvciB0aGUgSU4wMSBldmVudC4gSXQgZG9lcyBub3QgcmVwcmVzZW50IGEgcmVhbCBhdHRhY2sgb3IgdGhyZWF0IHRvIHRoZSBjb21wYW55J3Mgc2VjdXJpdHkuCg==
+            </div>
+            
+            <!-- Botão de copiar com tamanho reduzido -->
+            <div class="flex justify-center md:justify-start">
+                <div class="relative">
+                    <button id="copyButton" class="copy-btn flex items-center justify-center text-xs">
+                        <span class="mr-1">COPY CODE</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                        </svg>
+                    </button>
+                    <div id="copyFeedback" class="copy-feedback">COPIED!</div>
+                </div>
+            </div>
+            
+            <div class="text-xs opacity-50 mt-4 mb-6"><!-- Fragment metadata: NODE IN01-X7K4 | LOG_TIME 2025-06-11T18:32Z | HEADER_CHECKSUM 9FA4-8B7C-220A-D41F --></div>
+            
+            <div class="preserve-format text-base md:text-lg leading-relaxed opacity-90">
+                If you manage to decipher it, share it with as few people as possible. Time is against us. We need you.
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
 </html>

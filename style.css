@@ -1,0 +1,499 @@
+/* Reset and base styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: black;
+    color: white;
+    font-family: 'Courier New', monospace;
+    position: relative;
+    max-width: 100vw; /* Limita a largura ao viewport */
+}
+
+/* Esconder barra de rolagem mas manter funcionalidade */
+::-webkit-scrollbar {
+    width: 0px; /* Largura zero para webkit browsers */
+}
+
+/* Container styles */
+.container {
+    overflow-x: hidden;
+    max-width: 100%;
+    padding: 20px;
+}
+
+.max-w-4xl {
+    max-width: 100%;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+/* Utility classes */
+.mx-auto { margin-left: auto; margin-right: auto; }
+.mb-8 { margin-bottom: 2rem; }
+.mb-12 { margin-bottom: 3rem; }
+.mb-4 { margin-bottom: 1rem; }
+.mb-2 { margin-bottom: 0.5rem; }
+.mt-4 { margin-top: 1rem; }
+.mb-6 { margin-bottom: 1.5rem; }
+.z-20 { z-index: 20; }
+
+.text-2xl { font-size: 1.5rem; }
+.text-xl { font-size: 1.25rem; }
+.text-base { font-size: 1rem; }
+.text-lg { font-size: 1.125rem; }
+.text-xs { font-size: 0.75rem; }
+
+.font-bold { font-weight: bold; }
+.tracking-wider { letter-spacing: 0.05em; }
+
+.opacity-90 { opacity: 0.9; }
+.opacity-50 { opacity: 0.5; }
+
+.leading-relaxed { line-height: 1.625; }
+
+.flex { display: flex; }
+.items-center { align-items: center; }
+.justify-center { justify-content: center; }
+.justify-start { justify-content: flex-start; }
+.relative { position: relative; }
+
+.h-4 { height: 1rem; }
+.w-4 { width: 1rem; }
+.mr-1 { margin-right: 0.25rem; }
+
+/* Noise effect */
+.noise {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    opacity: 0.25;
+    z-index: 10;
+    background-blend-mode: overlay;
+    mix-blend-mode: overlay;
+}
+
+/* CRT effect */
+.crt-effect {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.35) 50%);
+    background-size: 100% 4px;
+    pointer-events: none;
+    z-index: 11;
+    opacity: 0.5;
+}
+
+/* Vignette effect */
+.vignette {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    box-shadow: inset 0 0 200px rgba(0,0,0,0.95);
+    pointer-events: none;
+    z-index: 12;
+}
+
+/* Glitch effect */
+.glitch {
+    position: relative;
+    animation: glitch 2s infinite;
+}
+
+@keyframes glitch {
+    0% { transform: translate(0) }
+    1% { transform: translate(-3px, 1px); }
+    2% { transform: translate(0); }
+    49% { transform: translate(0); }
+    50% { transform: translate(2px, -2px); filter: brightness(1.1); }
+    51% { transform: translate(0); }
+    87% { transform: translate(0); }
+    88% { transform: translate(-1px, 2px); }
+    89% { transform: translate(0); }
+    100% { transform: translate(0) }
+}
+
+/* Video container */
+.video-container {
+    position: relative;
+    width: 100%;
+    max-width: 700px; /* Reduzido de 800px para 700px */
+    margin: 0 auto;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    margin-top: 40px; /* Aumentado o espaçamento do título */
+    margin-bottom: 40px; /* Aumentado o espaçamento inferior */
+    height: 394px; /* Altura proporcional para 16:9 */
+    background-color: #000;
+}
+
+/* Surveillance video simulation */
+.surveillance-video {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background-color: #111;
+    overflow: hidden;
+}
+
+.surveillance-static {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('data:image/svg+xml;utf8,<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"><filter id="noiseFilter"><feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch"/><feColorMatrix type="matrix" values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 0.5 0"/></filter><rect width="100%" height="100%" filter="url(%23noiseFilter)"/></svg>');
+    opacity: 0.15;
+    pointer-events: none;
+}
+
+.surveillance-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: rgba(255, 255, 255, 0.7);
+    font-family: monospace;
+    text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+    z-index: 2;
+    transition: opacity 0.5s ease;
+}
+
+.surveillance-text {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+    letter-spacing: 2px;
+}
+
+.surveillance-subtext {
+    font-size: 1rem;
+    opacity: 0.8;
+}
+
+.surveillance-info {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.7);
+    z-index: 3;
+}
+
+.surveillance-rec {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    display: flex;
+    align-items: center;
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.7);
+    z-index: 3;
+}
+
+.rec-dot {
+    width: 10px;
+    height: 10px;
+    background-color: #ff0000;
+    border-radius: 50%;
+    margin-right: 5px;
+    animation: blink 1s infinite;
+}
+
+.surveillance-scan {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: rgba(255, 255, 255, 0.5);
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+    animation: scan 3s linear infinite;
+    z-index: 2;
+}
+
+.surveillance-glitch {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: transparent;
+    z-index: 1;
+}
+
+.video-label {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 5px 10px;
+    font-size: 0.8rem;
+    z-index: 4;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* YouTube container */
+.youtube-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    opacity: 0;
+    transition: opacity 1s ease;
+}
+
+.youtube-container iframe {
+    width: 100%;
+    height: 100%;
+    border: 0;
+}
+
+/* Video transition effect */
+.video-transition {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 255, 0, 0.1);
+    z-index: 5;
+    opacity: 0;
+    pointer-events: none;
+}
+
+@keyframes videoTransition {
+    0% { opacity: 0; }
+    10% { opacity: 0.8; }
+    20% { opacity: 0; }
+    30% { opacity: 0.6; }
+    40% { opacity: 0; }
+    50% { opacity: 0.4; }
+    60% { opacity: 0; }
+    100% { opacity: 0; }
+}
+
+/* Copy button */
+.copy-btn {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: white;
+    padding: 8px 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: 'Courier New', monospace;
+    font-size: 0.75rem;
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    max-width: 160px;
+    margin: 10px 0;
+}
+
+.copy-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.copy-btn:active {
+    transform: scale(0.98);
+}
+
+.copy-btn::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+}
+
+.copy-btn:hover::after {
+    left: 100%;
+}
+
+/* Scan line */
+.scan-line {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 8px;
+    background-color: rgba(255, 255, 255, 0.2);
+    animation: scan 4s linear infinite;
+    pointer-events: none;
+    z-index: 9;
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.7);
+}
+
+@keyframes scan {
+    0% { top: -10px; }
+    100% { top: 100%; }
+}
+
+/* Horizontal lines */
+.horizontal-lines {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 1px,
+        rgba(255, 255, 255, 0.05) 1px,
+        rgba(255, 255, 255, 0.05) 2px
+    );
+    pointer-events: none;
+    z-index: 8;
+}
+
+/* Flicker effect */
+.flicker {
+    animation: flicker 0.2s infinite alternate;
+}
+
+@keyframes flicker {
+    0%, 95% { opacity: 1; }
+    100% { opacity: 0.85; }
+}
+
+/* Code fragment */
+.code-fragment {
+    background-color: rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 15px;
+    font-family: monospace;
+    overflow-x: auto;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    color: #aaaaaa;
+    margin: 15px 0;
+    max-width: 100%; /* Limita a largura para evitar rolagem horizontal */
+}
+
+/* Blink animation */
+.blink {
+    animation: blink 1s step-end infinite;
+}
+
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+}
+
+/* Transmission header */
+.transmission-header {
+    color: #ffffff;
+    letter-spacing: 2px;
+}
+
+/* Preserve format */
+.preserve-format {
+    white-space: pre-line;
+    line-height: 1.5;
+}
+
+/* Copy feedback */
+.copy-feedback {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 255, 0, 0.2);
+    color: white;
+    font-weight: bold;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+}
+
+.copy-feedback.active {
+    opacity: 1;
+    animation: glitch-feedback 0.5s infinite;
+}
+
+@keyframes glitch-feedback {
+    0% { transform: translate(0) }
+    20% { transform: translate(-2px, 1px); filter: hue-rotate(90deg); }
+    40% { transform: translate(0); }
+    60% { transform: translate(1px, -1px); filter: hue-rotate(180deg); }
+    80% { transform: translate(-1px, 0); }
+    100% { transform: translate(0) }
+}
+
+/* Bad reception effect */
+.bad-reception {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        90deg,
+        transparent 0%,
+        rgba(255, 255, 255, 0.1) 50%,
+        transparent 100%
+    );
+    opacity: 0;
+    pointer-events: none;
+    z-index: 13;
+    animation: bad-reception 8s infinite;
+}
+
+@keyframes bad-reception {
+    0%, 95% { opacity: 0; transform: translateX(-100%); }
+    96%, 98% { opacity: 0.7; transform: translateX(100%); }
+    99%, 100% { opacity: 0; transform: translateX(100%); }
+}
+
+/* Responsive design */
+@media (max-width: 640px) {
+    .code-fragment {
+        font-size: 0.8rem;
+        padding: 10px;
+    }
+    
+    .transmission-header {
+        font-size: 1.2rem;
+    }
+    
+    .video-container {
+        height: 300px;
+    }
+}
+
+/* Additional utility classes for flexbox */
+.flex { display: flex; }
+.items-center { align-items: center; }
+.justify-center { justify-content: center; }
+.justify-start { justify-content: flex-start; }
+.relative { position: relative; }
+
+/* Text utilities */
+.text-center { text-align: center; }
+.text-left { text-align: left; }
+.text-right { text-align: right; }
