@@ -58,6 +58,9 @@ body {
 .text-lg { font-size: 1.125rem; }
 .text-xs { font-size: 0.75rem; }
 
+/* Colors */
+.text-red-500 { color: #ef4444; }
+
 .font-bold { font-weight: bold; }
 .tracking-wider { letter-spacing: 0.05em; }
 
