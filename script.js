@@ -13,6 +13,7 @@ function initializeApplication() {
     initializeSurveillanceVideo();
     initializeRandomGlitches();
     initializeHorizontalScrollCheck();
+    initializeAutoSoundActivation();
 }
 
 // ==========================================================================
@@ -304,15 +305,15 @@ async function showYouTubeVideo() {
             youtubeContainer.appendChild(soundIndicator);
             youtubeContainer.style.opacity = '1';
             
-            // Create YouTube player with autoplay and mute
+            // Create YouTube player with autoplay - try unmuted first, fallback to muted
             youtubePlayer = new YT.Player('youtube-player', {
                 height: '100%',
                 width: '100%',
                 videoId: 'tqn1cLICJm4',
                 playerVars: {
-                    // Autoplay settings - muted for browser compliance
+                    // Autoplay settings - try unmuted first for better experience
                     autoplay: 1,
-                    mute: 1,
+                    mute: 0, // Try unmuted first
                     // Player appearance
                     modestbranding: 1,
                     rel: 0,
@@ -328,12 +329,15 @@ async function showYouTubeVideo() {
                 events: {
                     onReady: function(event) {
                         console.log('YouTube player ready');
-                        // Player is ready and will autoplay muted
+                        // Try to unmute immediately when ready
+                        tryUnmutePlayer();
                     },
                     onStateChange: function(event) {
                         // Handle player state changes
                         if (event.data === YT.PlayerState.PLAYING) {
                             console.log('Video started playing');
+                            // Try to unmute when playing starts
+                            tryUnmutePlayer();
                         }
                     },
                     onError: function(event) {
@@ -341,6 +345,37 @@ async function showYouTubeVideo() {
                     }
                 }
             });
+            
+            // Function to try unmuting the player automatically
+            function tryUnmutePlayer() {
+                if (youtubePlayer && youtubePlayer.unMute && youtubePlayer.isMuted) {
+                    try {
+                        // Try to unmute the player
+                        youtubePlayer.unMute();
+                        youtubePlayer.setVolume(100);
+                        
+                        // Check if unmute was successful
+                        setTimeout(() => {
+                            if (youtubePlayer.isMuted && youtubePlayer.isMuted()) {
+                                console.log('Browser blocked autoplay with sound - waiting for user interaction');
+                                // Keep the sound indicator visible
+                            } else {
+                                console.log('Sound activated automatically');
+                                // Hide the sound indicator since sound is working
+                                const soundIndicator = document.getElementById('sound-indicator');
+                                if (soundIndicator) {
+                                    soundIndicator.style.opacity = '0';
+                                    setTimeout(() => {
+                                        soundIndicator.remove();
+                                    }, 1000);
+                                }
+                            }
+                        }, 500);
+                    } catch (error) {
+                        console.log('Auto-unmute failed:', error);
+                    }
+                }
+            }
             
             // Function to activate sound
             function activateSound() {
@@ -402,7 +437,8 @@ async function showYouTubeVideo() {
  */
 function createFallbackIframe(youtubeContainer, videoTransition) {
     const iframe = document.createElement('iframe');
-    iframe.src = "https://www.youtube.com/embed/tqn1cLICJm4?autoplay=1&mute=1&origin=" + window.location.origin;
+    // Try without mute first, fallback to muted if needed
+    iframe.src = "https://www.youtube.com/embed/tqn1cLICJm4?autoplay=1&mute=0&origin=" + window.location.origin;
     iframe.title = 'Surveillance Feed';
     iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
     iframe.allowFullscreen = false;
@@ -531,4 +567,49 @@ function initializeHorizontalScrollCheck() {
     
     // Also check periodically
     setInterval(checkHorizontalScroll, 1000);
+}
+
+// ==========================================================================
+// AUTO SOUND ACTIVATION ATTEMPTS
+// ==========================================================================
+
+function initializeAutoSoundActivation() {
+    // Try to activate sound on various early user interactions
+    const autoSoundEvents = ['click', 'touchstart', 'keydown', 'scroll', 'mousemove'];
+    
+    function attemptAutoSound() {
+        if (youtubePlayer && youtubePlayer.unMute) {
+            try {
+                youtubePlayer.unMute();
+                youtubePlayer.setVolume(100);
+                
+                // Check if successful
+                setTimeout(() => {
+                    if (youtubePlayer.isMuted && !youtubePlayer.isMuted()) {
+                        console.log('Auto-sound activated on user interaction');
+                        // Remove listeners since we succeeded
+                        autoSoundEvents.forEach(event => {
+                            document.removeEventListener(event, attemptAutoSound);
+                        });
+                        
+                        // Hide sound indicator
+                        const soundIndicator = document.getElementById('sound-indicator');
+                        if (soundIndicator) {
+                            soundIndicator.style.opacity = '0';
+                            setTimeout(() => {
+                                soundIndicator.remove();
+                            }, 500);
+                        }
+                    }
+                }, 200);
+            } catch (error) {
+                console.log('Auto-sound attempt failed:', error);
+            }
+        }
+    }
+    
+    // Add listeners for early user interactions
+    autoSoundEvents.forEach(event => {
+        document.addEventListener(event, attemptAutoSound, { once: true, passive: true });
+    });
 } 
