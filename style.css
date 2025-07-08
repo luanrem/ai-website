@@ -235,6 +235,9 @@ body {
 /* Highlight Text */
 .highlight-text {
     color: red;
+    text-underline-position: auto;
+    text-decoration: underline;
+    text-underline-offset: 0.3em;
 }
 
 /* Paragraph spacing */
